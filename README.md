@@ -1,12 +1,7 @@
-
-
 <p align="center">
 <img src="https://i.imgur.com/syNInGJ.png" width="150">
 <h3 align="center">BankApp</h3>
-</p>
-
-<p align="center>
-<img src="https://img.shields.io/badge/angular-%23DD0031.svg?style=for-the-badge&logo=angular&logoColor=white" alt="Angular">
+<p align="center"><img src="https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/angular-%23DD0031.svg?style=for-the-badge&logo=angular&logoColor=white"></p>
 </p>
 
 ### Database configuration
