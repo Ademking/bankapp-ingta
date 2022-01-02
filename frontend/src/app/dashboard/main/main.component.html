@@ -1,0 +1,6 @@
+<div class="min-h-screen flex flex-col flex-auto flex-shrink-0 antialiased bg-gray-50 text-gray-800">
+  <app-sidebar *ngIf="!isMobile"></app-sidebar>
+  <div [ngClass]="{'h-full ml-64 mt-4 mb-10 md:ml-64': !isMobile}">
+    <router-outlet></router-outlet>
+  </div>
+</div>

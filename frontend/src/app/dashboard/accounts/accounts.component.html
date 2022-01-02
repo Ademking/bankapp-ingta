@@ -1,0 +1,274 @@
+<section class="container mx-auto p-6 font-mono">
+
+  <div class="lg:flex lg:items-center lg:justify-between mb-4">
+    <div class="flex-1 min-w-0">
+      <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+        Accounts
+      </h2>
+      <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
+        <div class="mt-2 flex items-center text-sm text-gray-500">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+          </svg> &nbsp; Total: {{listComptes.length}} Account{{ listComptes.length > 1 ? 's' : '' }}
+        </div>
+
+      </div>
+    </div>
+    <div *ngIf="listComptes.length > 0" class="mt-5 flex lg:mt-0 lg:ml-4" (click)="showAddModal = true">
+      <span class="sm:ml-3">
+        <button type="button"
+          class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>&nbsp;
+          Create New Account
+        </button>
+      </span>
+    </div>
+  </div>
+
+
+  <div *ngIf="listComptes.length > 0" class="w-full mb-8 overflow-hidden rounded-lg shadow-lg">
+    <div class="w-full">
+      <table class="w-full">
+        <thead>
+          <tr class="text-md font-semibold tracking-wide text-left text-gray-900 bg-gray-100  border-b border-gray-600">
+            <th class="px-4 py-3">Id</th>
+            <th class="px-4 py-3">Client</th>
+            <th class="px-4 py-3">Type</th>
+            <th class="px-4 py-3">Balance</th>
+            <th class="px-4 py-3">Overdraft</th>
+            <th class="px-4 py-3">Employee</th>
+            <th class="px-4 py-3">Last Modification</th>
+            <th class="px-4 py-3">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white">
+          <tr *ngFor="let compte of listComptes" class="text-gray-700">
+
+            <td class="px-4 py-3 text-xs border">{{ compte.codeCompte }}</td>
+
+            <td class="px-4 py-3 text-xs border">{{ compte.client.nomClient }}</td>
+
+            <td class="px-4 py-3 text-xs border text-center">
+
+              <div *ngIf="compte.type_CPT == 'CC'"
+                class="text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 bg-blue-200 text-blue-700 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                </svg> &nbsp; Checking (CC)
+              </div>
+
+              <div *ngIf="compte.type_CPT == 'CE'"
+                class="text-xs inline-flex items-center font-bold leading-sm uppercase px-3 py-1 bg-green-200 text-green-700 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg> &nbsp; Savings (CE)
+              </div>
+
+
+
+            </td>
+
+            <td class="px-4 py-3 text-xs border">{{ compte.solde }} TND</td>
+
+            <td *ngIf="compte.decouvert" class="px-4 py-3 text-xs border">{{ compte.decouvert }} TND</td>
+            <td *ngIf="!compte.decouvert" class="px-4 py-3 text-xs border">-</td>
+
+            <td class="px-4 py-3 text-xs border">{{ compte.employes.nomEmploye }}</td>
+
+
+            <td class="px-4 py-3 text-xs border">
+              <p class="inline-flex">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg> &nbsp; {{ compte.dateCreation }}
+              </p>
+
+            </td>
+
+
+            <td class="px-4 py-3 text-xs border">
+              <span (click)="openEditModal(compte)"
+                class="cursor-pointer hover:text-green-900 text-center mr-2 px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="inline w-3 h-3 feather feather-edit">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+              </span>
+              <span (click)="deleteEmp(compte.codeCompte, compte.type_CPT)"
+                class="cursor-pointer hover:text-red-900 px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-sm">
+
+
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="inline w-3 h-3 feather feather-trash-2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  <line x1="10" y1="11" x2="10" y2="17"></line>
+                  <line x1="14" y1="11" x2="14" y2="17"></line>
+                </svg>
+              </span>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <app-empty *ngIf="listComptes.length == 0">
+    <div class="mt-5 flex lg:mt-0 lg:ml-4" (click)="showAddModal = true">
+      <span class="sm:ml-3">
+        <button type="button"
+          class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>&nbsp;
+          Create New Account
+        </button>
+      </span>
+    </div>
+  </app-empty>
+</section>
+
+
+<!-- add Emp modal -->
+<div *ngIf="showAddModal"
+  class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
+  <div class="relative w-8/12 my-6 mx-auto max-w-6xl">
+    <!--content-->
+    <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+      <!--header-->
+      <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+        <h3 class="text-2xl font-semibold">
+          Create New Account
+        </h3>
+        <button
+          class="p-1 ml-auto bg-transparent border-0 text-black opacity-40 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+          (click)="showAddModal = false">
+          <span class="text-black">
+            ×
+          </span>
+        </button>
+      </div>
+      <!--body-->
+      <div class="relative p-6 flex-auto">
+
+
+        <select [(ngModel)]="clientId" class="mb-4 outline-none border-gray-200 w-full rounded">
+          <option value="" disabled selected>Select Client</option>
+          <option *ngFor="let g of listClients" [value]="g.codeClient">{{ g.nomClient }}</option>
+        </select>
+
+        <select [(ngModel)]="empId" class="mb-4 outline-none border-gray-200 w-full rounded">
+          <option value="" disabled selected>Select Employee</option>
+          <option *ngFor="let g of listEmp" [value]="g.codeEmploye">{{ g.nomEmploye }}</option>
+        </select>
+
+        <select [(ngModel)]="accountType" class="mb-4 outline-none border-gray-200 w-full rounded">
+          <option value="" disabled selected>Select Account Type</option>
+          <option value="CC">Checking Account(CC)</option>
+          <option value="CE">Saving Account (CE)</option>
+        </select>
+
+        <input (keypress)="keyPress($event)" class="mb-4 outline-none border-gray-200 w-full rounded" [(ngModel)]="balance" type="text" name="fullname"
+        id="balance" autocomplete="off" placeholder="Balance (TND)">
+
+
+        <input (keypress)="keyPress($event)" *ngIf="accountType == 'CC'" class="mb-4 outline-none border-gray-200 w-full rounded" [(ngModel)]="decouvert" type="text" name="fullname"
+        id="decouvert" autocomplete="off" placeholder="Overdraft (TND)">
+
+      </div>
+
+      <!--footer-->
+      <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+        <button
+          class="text-black background-transparent font-bold px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 fease-linear transition-all duration-150"
+          type="button" (click)="showAddModal = false">
+          Cancel
+        </button>
+        <button (click)="submitAccount()"
+          class="bg-blue-600 text-white active:bg-emerald-600 font-bold text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- add Emp modal -->
+<div *ngIf="showEditModal"
+  class="overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none justify-center items-center flex">
+  <div class="relative w-8/12 my-6 mx-auto max-w-6xl">
+    <!--content-->
+    <div class="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+      <!--header-->
+      <div class="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+        <h3 class="text-2xl font-semibold">
+          Update Account
+        </h3>
+        <button
+          class="p-1 ml-auto bg-transparent border-0 text-black opacity-40 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+          (click)="showEditModal = false">
+          <span class="text-black">
+            ×
+          </span>
+        </button>
+      </div>
+      <!--body-->
+      <div class="relative p-6 flex-auto">
+
+        <p class="pb-1">Client:</p>
+        <select [(ngModel)]="tmpclientId" class="mb-4 outline-none border-gray-200 w-full rounded">
+          <option value="" disabled selected>Select Client</option>
+          <option *ngFor="let g of listClients" [value]="g.codeClient">{{ g.nomClient }}</option>
+        </select>
+
+        <p class="pb-1">Employee:</p>
+        <select [(ngModel)]="tmpempId" class="mb-4 outline-none border-gray-200 w-full rounded">
+          <option value="" disabled selected>Select Employee</option>
+          <option *ngFor="let g of listEmp" [value]="g.codeEmploye">{{ g.nomEmploye }}</option>
+        </select>
+
+        <p class="pb-1">Account Type:</p>
+        <select disabled [(ngModel)]="tmpaccountType" class="mb-4 outline-none border-gray-200 w-full rounded">
+          <option value="" disabled selected>Select Account Type</option>
+          <option value="CC">Checking Account(CC)</option>
+          <option value="CE">Saving Account (CE)</option>
+        </select>
+
+        <p class="pb-1">Balance (TND):</p>
+        <input (keypress)="keyPress($event)" class="mb-4 outline-none border-gray-200 w-full rounded" [(ngModel)]="tmpbalance" type="text" name="fullname"
+        id="balance" autocomplete="off" placeholder="Balance (TND)">
+
+        <p *ngIf="tmpaccountType == 'CC'" class="pb-1">Overdraft (TND):</p>
+        <input (keypress)="keyPress($event)" *ngIf="tmpaccountType == 'CC'" class="mb-4 outline-none border-gray-200 w-full rounded" [(ngModel)]="tmpdecouvert" type="text" name="fullname"
+        id="decouvert" autocomplete="off" placeholder="Overdraft (TND)">
+
+      </div>
+
+      <!--footer-->
+      <div class="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+        <button
+          class="text-black background-transparent font-bold px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 fease-linear transition-all duration-150"
+          type="button" (click)="showAddModal = false">
+          Cancel
+        </button>
+        <button (click)="updateAccount()"
+          class="bg-blue-600 text-white active:bg-emerald-600 font-bold text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+          type="button">
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div *ngIf="showAddModal || showEditModal" class="opacity-50 fixed inset-0 z-40 bg-black"></div>
